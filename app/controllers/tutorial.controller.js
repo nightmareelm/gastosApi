@@ -1,24 +1,28 @@
 const db = require("../models");
-const Tutorial = db.tutorials;
+const Gastos = db.gastos;
 
 // Create and Save a new Tutorial
 exports.create = (req, res) => {
   // Validate request
-  if (!req.body.title) {
+  if (!req.body.tituloGasto) {
     res.status(400).send({ message: "Content can not be empty!" });
     return;
   }
 
-  // Create a Tutorial
-  const tutorial = new Tutorial({
-    title: req.body.title,
-    description: req.body.description,
-    published: req.body.published ? req.body.published : false
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  // Create a Gasto
+  const gasto = new Gastos({
+    tituloGasto: req.body.tituloGasto,
+    cantidad: req.body.cantidad,
+    fecha: req.body.fecha,
+    establecimiento: req.body.establecimiento,
+    comentario: req.body.comentario
   });
 
   // Save Tutorial in the database
-  tutorial
-    .save(tutorial)
+  gasto
+    .save(gasto)
     .then(data => {
       res.send(data);
     })
@@ -32,10 +36,12 @@ exports.create = (req, res) => {
 
 // Retrieve all Tutorials from the database.
 exports.findAll = (req, res) => {
-  const title = req.query.title;
-  var condition = title ? { title: { $regex: new RegExp(title), $options: "i" } } : {};
+  const title = req.query.tituloGasto;
+  var condition = title ? { tituloGasto: { $regex: new RegExp(title), $options: "i" } } : {};
 
-  Tutorial.find(condition)
+  res.setHeader('Access-Control-Allow-Origin', '*');
+
+  Gastos.find(condition)
     .then(data => {
       res.send(data);
     })
@@ -51,7 +57,7 @@ exports.findAll = (req, res) => {
 exports.findOne = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findById(id)
+  Gastos.findById(id)
     .then(data => {
       if (!data)
         res.status(404).send({ message: "Not found Tutorial with id " + id });
@@ -74,7 +80,7 @@ exports.update = (req, res) => {
 
   const id = req.params.id;
 
-  Tutorial.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
+  Gastos.findByIdAndUpdate(id, req.body, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -93,7 +99,7 @@ exports.update = (req, res) => {
 exports.delete = (req, res) => {
   const id = req.params.id;
 
-  Tutorial.findByIdAndRemove(id, { useFindAndModify: false })
+  Gastos.findByIdAndRemove(id, { useFindAndModify: false })
     .then(data => {
       if (!data) {
         res.status(404).send({
@@ -114,7 +120,7 @@ exports.delete = (req, res) => {
 
 // Delete all Tutorials from the database.
 exports.deleteAll = (req, res) => {
-  Tutorial.deleteMany({})
+  Gastos.deleteMany({})
     .then(data => {
       res.send({
         message: `${data.deletedCount} Tutorials were deleted successfully!`
@@ -130,7 +136,7 @@ exports.deleteAll = (req, res) => {
 
 // Find all published Tutorials
 exports.findAllPublished = (req, res) => {
-  Tutorial.find({ published: true })
+  Gastos.find({ published: true })
     .then(data => {
       res.send(data);
     })
