@@ -9,7 +9,17 @@ exports.create = (req, res) => {
     return;
   }
 
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const allowedOrigins = ['http://localhost:8080', 
+        'https://gastos-api.onrender.com/', 
+        'https://gastos-api.onrender.com/'];
+  const origin = req.headers.origin;
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader('Access-Control-Allow-Origin', origin);
+  }
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-credentials", true);
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, UPDATE");
+
 
   // Create a Gasto
   const gasto = new Gastos({

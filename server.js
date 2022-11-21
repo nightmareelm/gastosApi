@@ -3,11 +3,7 @@ const cors = require("cors");
 
 const app = express();
 
-var corsOptions = {
-  origin: "https://gastos-api.onrender.com/api/tutorials"
-};
-
-app.use(cors(corsOptions));
+app.use(cors());
 
 // parse requests of content-type - application/json
 app.use(express.json());
