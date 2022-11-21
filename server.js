@@ -4,7 +4,7 @@ const cors = require("cors");
 const app = express();
 
 var corsOptions = {
-  origin: "http://localhost:8080/api/tutorials"
+  origin: "https://gastos-api.onrender.com/api/tutorials"
 };
 
 app.use(cors(corsOptions));
