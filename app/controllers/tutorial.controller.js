@@ -59,7 +59,8 @@ exports.findAll = (req, res) => {
   query.skip = size * (pageNo - 1);
   query.limit = size;
 
-  /*Gastos.find({}, {}, condition, query)
+  Gastos.countDocuments({}, function (err, total) {
+  Gastos.find({}, condition, query)
     .then(data => {
       res.send(data);
     })
@@ -68,19 +69,20 @@ exports.findAll = (req, res) => {
         message:
           err.message || "Algo ocurrio al traer la información"
       });
-    });*/
+    });
+  })
 
-  Gastos.countDocuments({}, function (err, total) {
+  /*Gastos.countDocuments({}, function (err, total) {
     Gastos.find({}, {}, query, function (err, data) {
       if (err) {
         response = { "error": true, "message": "Error fetching data" };
       } else {
         var totalPages = Math.ceil(total / size);
-        response = { "error": false, "message": data, "pages": totalPages };
+        response = { "error": false, data, "pages": totalPages };
       }
       res.json(response);
     });
-  });
+  });*/
 
 };
 
