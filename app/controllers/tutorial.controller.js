@@ -49,16 +49,39 @@ exports.findAll = (req, res) => {
 
   res.setHeader('Access-Control-Allow-Origin', '*');
 
-  Gastos.find(condition)
+  var pageNo = parseInt(req.query.pageNo);
+  var size = parseInt(req.query.size);
+  var query = {}
+  if (pageNo < 0 || pageNo === 0) {
+    response = { "error": true, "message": "pagina invalida, de comenzar con 1" };
+    return res.json(response);
+  }
+  query.skip = size * (pageNo - 1);
+  query.limit = size;
+
+  /*Gastos.find({}, {}, condition, query)
     .then(data => {
       res.send(data);
     })
     .catch(err => {
       res.status(500).send({
         message:
-          err.message || "Some error occurred while retrieving tutorials."
+          err.message || "Algo ocurrio al traer la información"
       });
+    });*/
+
+  Gastos.countDocuments({}, function (err, total) {
+    Gastos.find({}, {}, query, function (err, data) {
+      if (err) {
+        response = { "error": true, "message": "Error fetching data" };
+      } else {
+        var totalPages = Math.ceil(total / size);
+        response = { "error": false, "message": data, "pages": totalPages };
+      }
+      res.json(response);
     });
+  });
+
 };
 
 // Find a single Tutorial with an id
