@@ -9,9 +9,7 @@ exports.create = (req, res) => {
     return;
   }
 
-  const allowedOrigins = ['http://localhost:8080', 
-        'https://gastos-api.onrender.com/', 
-        'https://gastos-api.onrender.com/'];
+  const allowedOrigins = ['http://localhost:8080'];
   const origin = req.headers.origin;
   if (allowedOrigins.includes(origin)) {
     res.setHeader('Access-Control-Allow-Origin', origin);
